@@ -6,10 +6,15 @@ import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  // Ganti jenis aplikasi menjadi NestExpressApplication
+  
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.enableCors();
+  app.enableCors({
+  origin: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Content-Type', 'Authorization', 'X-Custom-Header'], 
+});
 
   app.useStaticAssets(
     join(__dirname, '..', 'node_modules', 'swagger-ui-dist'),
