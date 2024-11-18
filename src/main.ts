@@ -6,15 +6,24 @@ import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-//   app.enableCors({
-//   origin: true,
-//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-//   allowedHeaders: ['Content-Type', 'Authorization'],
-//   exposedHeaders: ['Content-Type', 'Authorization', 'X-Custom-Header'], 
-// });
+  app.enableCors({
+    origin: '*', 
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Content-Type', 'Authorization', 'X-Custom-Header'],
+  });
+
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+      return res.status(200).send();
+    }
+    next();
+  });
 
   app.useStaticAssets(
     join(__dirname, '..', 'node_modules', 'swagger-ui-dist'),
