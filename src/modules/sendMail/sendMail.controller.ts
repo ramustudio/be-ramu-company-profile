@@ -10,7 +10,7 @@ import { SendMailService } from './sendMail.service';
 import { SendMailDto } from './sendMail.contract';
 
 @ApiTags('Send Email')
-@Controller('sendMail')
+@Controller('send-mail')
 export class SendMailController {
   constructor(private readonly sendMailService: SendMailService) {}
 
